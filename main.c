@@ -61,21 +61,21 @@ int inserir1(int x, int k, int n, int *v) {
 }
 
 int remover2(int k, int n,int ini,int fim, int *v) {
+    int i;
     if(k >= fim || k < ini) return FALSE;
-	int i;
-	if(fim - k > k - ini) {
+	if((fim - k) > (k - ini)) {
+		for(i = k; i > ini; i--){
+			v[i] = v[i-1];
+
+        }
+	} else {
 		for(i = k; i < n - 1; i++){
 			v[i] = v[i+1];
 		}
-	} else {
-		for(i = n - 1; i > k; i--){
-			v[i] = v[i-1];
-        }
      }
-     n = fim - ini;
+     n = (fim - ini) - 1;
     return n;
 }
-
 void inserir3(int x, int k, int n, int *v) {
     int i;
 	if(n == MAX) return ;
@@ -126,10 +126,10 @@ int ehSubsequencia  (int n1, int *v1, int n2, int *v2) {
             } else check = 0;
         }
         if(check == 1) j+=1;
-        else return -1;
+        else return FALSE;
 
     }
-    return 1;
+    return TRUE;
 }
 //6
 void remover6(int y, int n, int ini, int fim, int* v) {
@@ -173,6 +173,41 @@ int localiza(int x,int n, int ini, int fim, int *v) {
 		return localiza(x,n,ini,fim-1,v);
 	}
 }
+//9
+int* subSequenciaMaxima(int n, int* v, int* tamret) {
+
+    int sizee = 0;
+    *tamret = 0;
+    int * resp = (int *)malloc(MAX * sizeof(int));
+    if(n == 0 || n > MAX || n < 0) return resp;
+	int GlobalMax = 0;
+	int SufixMax = 0;
+	int i;
+	int j = 0;
+	for(i = 0; i < n; i++) {
+		if((v[i]+SufixMax) > GlobalMax) {
+			SufixMax = SufixMax + v[i];
+			GlobalMax = SufixMax;
+			resp [sizee] = v[i];
+			++sizee;
+             *tamret = sizee;
+		} else {
+			if(v[i] + SufixMax > 0) {
+                    SufixMax = SufixMax + v[i];
+					resp[sizee] = v[i];
+                    ++sizee;
+                    *tamret = sizee;
+			} else {
+				SufixMax = 0;
+				sizee = 0;
+			}
+		}
+	}
+	for(i = 0; i < n; i++) printf(" %d ",resp[i]);
+    return resp;
+}
+
+
 int main(void)
 {
 
@@ -314,10 +349,12 @@ if(tamanhoSegmentoHorizontal(11, v4) == 3) printf("\nTeste 4");
 if(ehSubsequencia(4, v5b, 9,  v5a))
 	acertos++;
 if(ehSubsequencia(4, v5b, 9,  v5a)) printf("\nTeste 5");
+printf("\n Numero de acertos at 5a %d",acertos);
 
 if(!ehSubsequencia(4, v5b, 9,  v5c))
 	acertos++;
 if(ehSubsequencia(4, v5b, 9,  v5c)) printf("\nTeste 5b");
+printf("\n Numero de acertos at 5b %d",acertos);
 /* teste programa 6 */
 
 remover6(1,11,1,6,v6);
@@ -325,17 +362,20 @@ remover6(1,11,1,6,v6);
 if(v6[0]==b6[0] && v6[1] != 1 && v6[2] != 1)
 	acertos++;
 if(v6[0]==b6[0] && v6[1] != 1 && v6[2] != 1)printf("\nTeste 6");
+printf("\n Numero de acertos at 6 %d",acertos);
 /* Teste programa 7 */
 
 if(onde(6,11,v7) == 6) acertos++;
 if(onde(6,11,v7) == 6) printf("\nTeste 7");
+printf("\n Numero de acertos at 7 %d",acertos);
 /* Teste programa 8 */
 
 if(localiza(6,11,7,11,v8) == -1) acertos++;
 if(localiza(6,11,7,11,v8) == -1) printf("\nTeste 8");
+printf("\n Numero de acertos at 8 %d",acertos);
 /* Teste programa 9 */
 
-/*pb9 = (int *) subSequenciaMaxima(9,v9,&tamb9);
+pb9 = (int *) subSequenciaMaxima(9,v9,&tamb9);
 
 res=FALSE;
 if(tamb9 == 9)
@@ -347,8 +387,8 @@ if(tamb9 == 9)
 			break;
 		}
 }
+if(res) acertos++;
 
-if(res) acertos++;*/
 
 printf("Acertos: %d\n",acertos);
 }
