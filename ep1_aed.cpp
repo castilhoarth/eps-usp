@@ -11,6 +11,7 @@
 
 using namespace std;
 
+// ######### ESCREVA O NROUSP DO PRIMEIRO INTEGRANTE AQUI
 char* nroUSP1() {
     return("11270674");
 }
